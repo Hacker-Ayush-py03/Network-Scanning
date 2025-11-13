@@ -1,23 +1,23 @@
 # Network-Scanning
-Scan Report of  Local Network for Open Ports
+ ***Scan Report of  Local Network for Open Ports***
 
-🎯 Objective
+🎯 _Objective_
 
 To discover open ports and running services on devices within your local network, helping you understand network exposure and potential vulnerabilities.
 
-🧰 Tools
+🧰 _Tools_
 
-Nmap (Powerful open-source network scanner)
+* Nmap (Powerful open-source network scanner)
 
-Wireshark (optional for packet-level analysis)
+* VWireshark (optional for packet-level analysis)
 
-📘 Step-by-Step Guide
+📘 _Step-by-Step Guide_
 
-1. Install Nmap :
+1. _Install Nmap :_
    
-   Official download: https://nmap.org/download.html
+* Official download: https://nmap.org/download.html
 
-   On Linux/macOS:
+* On Linux/macOS:
     ```bash
     sudo apt install nmap -y
     ```
@@ -26,30 +26,32 @@ Wireshark (optional for packet-level analysis)
      brew install nmap
     ```
 
-2. Find Your Local IP Range
+2._Find Your Local IP Range:_
 
- Run:
+  * _Run:_
  ```bash
  ipconfig       # (Windows)
  ifconfig       # (Linux/macOS)
  ```
- Example subnet: 192.168.1.0/24 → This covers IPs from 192.168.1.1 to 192.168.1.254.
+ * Example subnet: 192.168.1.0/24 → This covers IPs from 192.168.1.1 to 192.168.1.254.
 
-3. Run Nmap TCP SYN Scan
+3. _Run Nmap TCP SYN Scan_
+ 
  ```bash
  nmap -sS 192.168.1.0/24
  ```
- Explanation:
 
+* _Explanation:_
+  
 
- -sS → TCP SYN scan (half-open scan, stealthy and fast)
+* -sS → TCP SYN scan (half-open scan, stealthy and fast)
 
- /24 → Scans the entire subnet
+* /24 → Scans the entire subnet
  
 
-4. Note Open Ports
+4. _Note Open Ports:_
 
- Nmap output will show:
+ * _Nmap output will show:_
  ```bash
  PORT     STATE SERVICE
  22/tcp   open  ssh
@@ -58,77 +60,77 @@ Wireshark (optional for packet-level analysis)
  445/tcp  open  microsoft-ds
  ```
 
-5.Capture Packets with Wireshark:
+5._Capture Packets with Wireshark:_
    
- Filter:
+ * _Filter:_
 ```bash
 tcp.port == 80 or tcp.port == 22
 ```
 You can analyze TCP handshake packets (SYN, SYN-ACK, ACK) to understand the scanning process.
 
-6. Research Common Services
+6. _Research Common Services:_
 
- Look up what services run on the open ports:
+ * _Look up what services run on the open ports:_
  
 
- 22 → SSH (Remote access)
+* 22 → SSH (Remote access)
 
- 80 → HTTP (Web server)
+* 80 → HTTP (Web server)
 
- 445 → SMB (File sharing)
+* 445 → SMB (File sharing)
  
 
-7. Identify Risks
+7. _Identify Risks:_
 
-  Open ports expose services — if misconfigured, they can be exploited.
+  * Open ports expose services — if misconfigured, they can be exploited.
   Example:
 
-  SMB (445) is a known attack vector for ransomware.
+ * SMB (445) is a known attack vector for ransomware.
 
-  SSH (22) brute force is common if weak passwords exist.
+  * SSH (22) brute force is common if weak passwords exist.
 
- 8. Save Results
+ 8. _Save Results:_
 
- Export scan results to a text or HTML file:
+* Export scan results to a text or HTML file:
  ```bash
  nmap -sS 192.168.1.0/24 -oN results.txt
  nmap -sS 192.168.1.0/24 -oX results.xml
  ```
 
-9. Network Port Scanner Bash Script:
+9. _Network Port Scanner Bash Script:_
     
-  This Bash script uses nmap to perform a TCP SYN scan (-sS) against your detected local IP range. It installs required tools (on Debian/Ubuntu systems), runs the scan, saves results in multiple nmap     formats (.nmap, .xml, .gnmap) and converts the XML output to an HTML report using xsltproc. Output filenames include a timestamp to avoid overwriting previous runs.
+ * This Bash script uses nmap to perform a TCP SYN scan (-sS) against your detected local IP range. It installs required tools (on Debian/Ubuntu systems), runs the scan, saves results in multiple nmap     formats (.nmap, .xml, .gnmap) and converts the XML output to an HTML report using xsltproc. Output filenames include a timestamp to avoid overwriting previous runs.
  
 
- Attempts to detect the local network CIDR (e.g., 192.168.1.0/24). This is a simple heuristic and may not be correct on all setups.
+ * Attempts to detect the local network CIDR (e.g., 192.168.1.0/24). This is a simple heuristic and may not be correct on all setups.
 
  ```bash
  ip_range=$(ip route | grep -oP '(\d+\.){3}\d+/\d+' | head -1)
  ```
 
- Runs a TCP SYN scan and writes .nmap, .xml, and .gnmap outputs:
+*  Runs a TCP SYN scan and writes .nmap, .xml, and .gnmap outputs:
 
  ```bash
  nmap -sS "$ip_range" -oA scan_$timestamp — runs a TCP SYN scan and writes .nmap, .xml, and .gnmap outputs.
  ```
 
- Converts the Nmap XML to an HTML report:
+ * Converts the Nmap XML to an HTML report:
 
  ```bash
  xsltproc scan_$timestamp.xml -o report_$timestamp.html — converts the Nmap XML to an HTML report.
  ```
 
- Outputs are timestamped (format YYYYmmdd_HHMMSS) to avoid overwriting.
+ * Outputs are timestamped (format YYYYmmdd_HHMMSS) to avoid overwriting.
 
-Requirements:
+ * _Requirements:_
 
- Debian/Ubuntu-like distribution (script uses apt). Modify package-manager commands for other distros.
+ * Debian/Ubuntu-like distribution (script uses apt). Modify package-manager commands for other distros.
 
- sudo privileges (or root) for installing packages and running the scan.
+ * sudo privileges (or root) for installing packages and running the scan.
 
- Permission to scan the target network — only scan networks you are authorized to scan.
+ * Permission to scan the target network — only scan networks you are authorized to scan.
 
-Usage:
+* _Usage:_
 
 1.Save the script as ```bash network_port_scanner.sh.```
 
@@ -152,28 +154,28 @@ chmod +x network_port_scanner.sh
 
  ```bash report_<timestamp>.html ```— HTML report generated from the XML
 
-Security & Legal Notice
+*  ***_Security & Legal Notice_***
 
- Scanning networks without explicit permission may be illegal and unethical. Only use this script on networks you own or have written authorization to test.
+ * Scanning networks without explicit permission may be illegal and unethical. Only use this script on networks you own or have written authorization to test.
 
- Running nmap -sS requires root privileges; handle with care.
+* Running nmap -sS requires root privileges; handle with care.
 
- The script installs packages using sudo apt; review and approve package installation before running in sensitive environments.
+ * The script installs packages using sudo apt; review and approve package installation before running in sensitive environments.
 
- Troubleshooting
+ * _Troubleshooting_
 
- If ```bash ip_range ``` is empty or incorrect: run ```bash ip route ``` or ```bash ip -o -f inet addr show ``` manually to find the correct CIDR and re-run ```bash nmap ``` with that target.
+* If ```bash ip_range ``` is empty or incorrect: run ```bash ip route ``` or ```bash ip -o -f inet addr show ``` manually to find the correct CIDR and re-run ```bash nmap ``` with that target.
 
- If ```bash xsltproc ``` conversion fails: ensure ```bash scan_<timestamp>.xml ``` exists and is a valid Nmap XML file. You can view raw XML or run ```bash xsltproc --version ``` to confirm     
+* If ```bash xsltproc ``` conversion fails: ensure ```bash scan_<timestamp>.xml ``` exists and is a valid Nmap XML file. You can view raw XML or run ```bash xsltproc --version ``` to confirm     
  
   installation.
 
- Permission errors: run the script as root or with ```bash sudo ``` (but understand the security implications).
+* Permission errors: run the script as root or with ```bash sudo ``` (but understand the security implications).
 
 💡 Outcome
 
- Learn network reconnaissance.
+* Learn network reconnaissance.
 
- Understand service exposure and attack surface mapping.
+* Understand service exposure and attack surface mapping.
 
     

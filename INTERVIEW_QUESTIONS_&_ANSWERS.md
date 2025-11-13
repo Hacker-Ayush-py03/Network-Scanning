@@ -18,18 +18,25 @@
 
       TCP scanning uses connection-oriented handshakes, while UDP scanning tests connectionless services — slower and less reliable.
 
-6.	How can open ports be secured?
+	   | TCP Scan |	 UDP Scan |
+  	   |----------|-----------|
+       |Connection-oriented|	Connectionless
+       |Reliable responses	|Unreliable responses
+       |Faster scanning	|Slower scanning
+       |SYN/RST packets|	Specific UDP payloads
+
+7.	How can open ports be secured?
   
 	   Close unused ports, use firewalls, enable intrusion detection, and patch services.
 
-7.	What is a firewall’s role?	
+8.	What is a firewall’s role?	
 
       Filters network traffic; blocks unauthorized connections to/from ports.
   	
-8.	Why do attackers perform port scans?
+9.	Why do attackers perform port scans?
      
        To map active services and identify potential vulnerabilities before exploiting them.
    	
-9.	How does Wireshark complement port scanning?
+10.	How does Wireshark complement port scanning?
    
      It helps visualize and analyze network packets during scans, revealing the TCP/UDP handshakes and responses.
